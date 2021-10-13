@@ -20,10 +20,10 @@ waitForDeployment(options)
 async function waitForDeployment (options) {
   const {
     token,
-    interval,
     environment
   } = options
 
+  const interval = parseInt(options.interval) || 5
   const timeout = parseInt(options.timeout) || 30
 
   const { sha } = github.context
@@ -70,9 +70,10 @@ async function waitForDeployment (options) {
       } else {
         core.info(`No statuses with state === "success": "${statuses.map(status => status.state).join('", "')}"`)
       }
-
-      await sleep(interval)
+     
     }
+    
+    await sleep(interval)
 
     const elapsed = (Date.now() - start) / 1000
     if (elapsed >= timeout) {
