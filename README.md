@@ -40,7 +40,10 @@ every push to the `Preview` environment, and pushes to the default branch to
 **TODO:** document how to set the environment conditionally.
 
 ### `timeout`
-The number of seconds after which to give up with an error. Default: 30.
+The number of seconds after which to give up with an error. Default: 300.
+
+### `deployment-timeout`
+The number of seconds after which to give up with an error if a deployment is not found. Default: 30.
 
 ### `interval`
 The number of seconds to wait between polls to the deployments API. Default: 5.

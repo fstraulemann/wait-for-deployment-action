@@ -5,7 +5,8 @@ const options = {
   token: core.getInput('github-token'),
   environment: core.getInput('environment'),
   timeout: core.getInput('timeout'),
-  interval: core.getInput('interval')
+  interval: core.getInput('interval'),
+  deployment_timeout: core.getInput('deployment-timeout')
 }
 
 waitForDeployment(options)
@@ -24,7 +25,8 @@ async function waitForDeployment (options) {
   } = options
 
   const interval = parseInt(options.interval) || 5
-  const timeout = parseInt(options.timeout) || 30
+  const timeout = parseInt(options.timeout) || 300
+  const deployment_timeout = parseInt(options.deployment_timeout) || 30
 
   const { sha } = github.context
   const octokit = github.getOctokit(token)
@@ -79,6 +81,9 @@ async function waitForDeployment (options) {
     if (elapsed >= timeout) {
       throw new Error(`Timing out after ${timeout} seconds (${elapsed} elapsed)`)
     }
+    
+    if (!deployments.length && elapsed >= deployment_timeout) {
+      throw new Error(`Timing out (no deployment found) after ${deployment_timeout} seconds (${elapsed} elapsed)`)
   }
 }
 
