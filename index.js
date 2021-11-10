@@ -44,6 +44,7 @@ async function waitForDeployment (options) {
   while (true) {
     const { data: deployments } = await octokit.repos.listDeployments(params)
     core.info(`Found ${deployments.length} deployments...`)
+    let running_deployments = false;
 
     for (const deployment of deployments) {
       core.info(`\tgetting statuses for deployment ${deployment.id}...`)
@@ -72,7 +73,10 @@ async function waitForDeployment (options) {
       } else {
         core.info(`No statuses with state === "success": "${statuses.map(status => status.state).join('", "')}"`)
       }
-     
+      if (statuses.filter(status => ["pending", "in_progress", "queued"].find(running => running === status)))
+      {
+        running_deployments = true
+      }
     }
     
     await sleep(interval)
@@ -82,8 +86,8 @@ async function waitForDeployment (options) {
       throw new Error(`Timing out after ${timeout} seconds (${elapsed} elapsed)`)
     }
     
-    if (!deployments.length && elapsed >= deployment_timeout) {
-      throw new Error(`Timing out (no deployment found) after ${deployment_timeout} seconds (${elapsed} elapsed)`)
+    if (!running_deployments && elapsed >= deployment_timeout) {
+      throw new Error(`Timing out (no current deployments found) after ${deployment_timeout} seconds (${elapsed} elapsed)`)
     }
   }
 }
