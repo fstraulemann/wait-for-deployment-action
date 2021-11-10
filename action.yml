@@ -13,6 +13,9 @@ inputs:
   environment:
     description: The deployment environment to wait for
   timeout:
+    description: The number of seconds after which to fail if no successful deployment is found.
+    default: 300
+  deployment-timeout:
     description: The number of seconds after which to fail if no deployment is found.
     default: 30
   interval:
