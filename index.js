@@ -73,7 +73,7 @@ async function waitForDeployment (options) {
       } else {
         core.info(`No statuses with state === "success": "${statuses.map(status => status.state).join('", "')}"`)
       }
-      if (statuses.filter(status => ["pending", "in_progress", "queued"].find(running => running === status)))
+      if (statuses.find(status => ["pending", "in_progress", "queued"].find(running => running === status)))
       {
         running_deployments = true
       }
