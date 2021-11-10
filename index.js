@@ -84,6 +84,7 @@ async function waitForDeployment (options) {
     
     if (!deployments.length && elapsed >= deployment_timeout) {
       throw new Error(`Timing out (no deployment found) after ${deployment_timeout} seconds (${elapsed} elapsed)`)
+    }
   }
 }
 
